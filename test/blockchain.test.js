@@ -1,22 +1,7 @@
-const expect = require('chai').expect;
-const assert = require('chai').assert;
-const CryptoJS = require('crypto-js');
+const { assert } = require('chai');
+
+const { Block } = require('../src/block');
 const { Blockchain } = require('../src/blockchain');
-const Block = require('../src/block').Block;
-const Blockchatin = require('../src/blockchain').Blockchain;
-
-describe('Block()', function() {
-    it('should create a new Block with data.', function() {
-        // 1. Arrange
-        var newBlock = new Block(0, new Date().getTime() / 1000, {amount: 5});
-
-        // 2. Act
-
-        // 3. Assert
-        calcHash = CryptoJS.SHA256(newBlock.index + newBlock.timestamp + JSON.stringify(newBlock.data) + newBlock.previousHash).toString();
-        expect(newBlock.hash).to.be.equal(calcHash);
-    });
-});
 
 describe('Blockchain()', function() {
     it('Create a new blockchain with a genisis block.', function() {
@@ -25,6 +10,14 @@ describe('Blockchain()', function() {
         assert.equal(testChain.chain[0].index, 0);
         assert.equal(testChain.chain[0].data['amount'], 0)
         assert.equal(testChain.chain[0].previousHash, '');
+    });
+
+    it('Return latest block.', function() {
+        var testChain = new Blockchain();
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
+
+        var latestBlock = testChain.getLatestBlock();
+        assert.equal(latestBlock.index, 1);
     });
 
     it('Add block to blockchain.', function() {

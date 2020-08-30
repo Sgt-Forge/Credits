@@ -1,4 +1,3 @@
-const CryptoJS = require('crypto-js');
 const Block = require('./block').Block;
 
 class Blockchain{
@@ -18,6 +17,21 @@ class Blockchain{
         newBlock.previousHash = this.getLatestBlock().hash;
         newBlock.hash = newBlock.calculateHash();
         this.chain.push(newBlock);
+    }
+
+    isValidNewBlock(previousBlock, newBlock){
+        if(previousBlock.index !== newBlock.index + 1){
+            console.log("[ERROR]: Invalid index for new block.")
+            return false;
+        } else if (previousBlock.hash !== newBlock.previousHash){
+            console.log("[ERROR]: Invalid previous hash for new block.")
+            return false;
+        } else if (newBlock.calculateHash() !== newBlock.hash){
+            console.log("[ERROR]: Invalid hash for new block.")
+            return false;
+        }
+
+        return true;
     }
 
     isChainValid(){

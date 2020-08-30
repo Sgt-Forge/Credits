@@ -1,0 +1,4 @@
+tests/
+.eslintrc.js
+.travis.yml
+.nyc_output
