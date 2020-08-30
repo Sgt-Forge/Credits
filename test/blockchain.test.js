@@ -1,4 +1,5 @@
 const { assert } = require('chai');
+const CryptoJS = require('crypto-js');
 
 const { Block } = require('../src/block');
 const { Blockchain } = require('../src/blockchain');
@@ -30,6 +31,23 @@ describe('Blockchain()', function() {
         assert.isAtLeast(testChain.chain[2].timestamp, testChain.chain[1].timestamp);
     });
 
+    it('Validate a new block.', function() {
+        var testChain = new Blockchain();
+        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, '0');
+        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, block1.hash);
+        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, block2.hash);
+        var block4 = new Block(4, new Date().getTime()/1000, {amount: 456}, block3.hash);
+        var block5 = new Block(5, new Date().getTime()/1000, {amount: 456}, block4.hash);
+        block3.hash = CryptoJS.SHA256('some randome data');
+        block5.data = JSON.stringify({amount: 500});
+        block5.hash = block3.calculateHash();
+
+        assert.isTrue(testChain.isValidNewBlock(block1, block2));
+        assert.isFalse(testChain.isValidNewBlock(block1, block3));
+        assert.isFalse(testChain.isValidNewBlock(block3, block4));
+        assert.isFalse(testChain.isValidNewBlock(block4, block5));
+    });
+
     it('Validate the blockchain.', function() {
         var testChain = new Blockchain();
         testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
@@ -37,6 +55,8 @@ describe('Blockchain()', function() {
 
         assert.isTrue(testChain.isChainValid());
         testChain.chain[1].data = {amount: 100};
+        assert.isFalse(testChain.isChainValid());
+        testChain.chain[1].hash = testChain.chain[1].calculateHash();
         assert.isFalse(testChain.isChainValid());
     });
 });

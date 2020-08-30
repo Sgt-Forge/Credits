@@ -1,4 +1,4 @@
-const Block = require('./block').Block;
+const { Block } = require('./block');
 
 class Blockchain{
     constructor(){
@@ -20,8 +20,8 @@ class Blockchain{
     }
 
     isValidNewBlock(previousBlock, newBlock){
-        if(previousBlock.index !== newBlock.index + 1){
-            console.log("[ERROR]: Invalid index for new block.")
+        if(previousBlock.index + 1 !== newBlock.index){
+            console.log("[ERROR]: Invalid index for new block. Previous index: ", previousBlock.index, " New index: ", newBlock.index);
             return false;
         } else if (previousBlock.hash !== newBlock.previousHash){
             console.log("[ERROR]: Invalid previous hash for new block.")
