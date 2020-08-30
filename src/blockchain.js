@@ -7,7 +7,7 @@ class Blockchain{
     }
 
     createGenesisBlock(){
-        return new Block(0, 0, new Date().getTime() / 1000, "Genesis Block", );
+        return new Block(0, new Date().getTime() / 1000, {amount: 0});
     }
 
     getLatestBlock(){
@@ -19,10 +19,23 @@ class Blockchain{
         newBlock.hash = newBlock.calculateHash();
         this.chain.push(newBlock);
     }
+
+    isChainValid(){
+        for(let i = 1; i < this.chain.length; i++){
+            const currentBlock = this.chain[i];
+            const previousBlock = this.chain[i - 1];
+            if(currentBlock.hash !== currentBlock.calculateHash()){
+                console.log("[ERROR]: Current block's hash is invalid!");
+                return false;
+            }
+            if(currentBlock.previousHash !== previousBlock.hash){
+                console.log("[ERROR]: Previous block's hash is invalid!");
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
-let creditChain = new Blockchain();
-creditChain.addBlock(new Block(1, new Date().getTime() / 1000, {amount: 4}));
-creditChain.addBlock(new Block(2, new Date().getTime() / 1000, {amount: 10}));
-
-console.log(JSON.stringify(creditChain, null, 4));
+module.exports.Blockchain = Blockchain;
