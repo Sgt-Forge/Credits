@@ -13,6 +13,18 @@ describe('Blockchain()', function() {
         assert.equal(testChain.chain[0].previousHash, '');
     });
 
+    it('Get the blockchain', function() {
+        var testChain = new Blockchain();
+
+        assert.equal(testChain.getBlockchain().length, 1);
+
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}));
+
+        assert.equal(testChain.getBlockchain().length, 3);
+        assert.equal(JSON.stringify(testChain.chain), JSON.stringify(testChain.getBlockchain()));
+    });
+
     it('Return latest block', function() {
         var testChain = new Blockchain();
         testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
@@ -66,7 +78,7 @@ describe('Blockchain()', function() {
         assert.isFalse(testChain.isChainValid());
     });
 
-    it('Replace the block chain', function() {
+    it('Replace the blockchain', function() {
         var oldChain = new Blockchain();
         var newChain = new Blockchain();
         var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, '0');
