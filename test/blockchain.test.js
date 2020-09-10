@@ -18,8 +18,8 @@ describe('Blockchain()', function() {
 
         assert.equal(testChain.getBlockchain().length, 1);
 
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
-        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}));
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
 
         assert.equal(testChain.getBlockchain().length, 3);
         assert.equal(JSON.stringify(testChain.chain), JSON.stringify(testChain.getBlockchain()));
@@ -27,7 +27,7 @@ describe('Blockchain()', function() {
 
     it('Return latest block', function() {
         var testChain = new Blockchain();
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
 
         var latestBlock = testChain.getLatestBlock();
         assert.equal(latestBlock.index, 1);
@@ -35,8 +35,8 @@ describe('Blockchain()', function() {
 
     it('Add block to blockchain', function() {
         var testChain = new Blockchain();
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
-        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}));
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
         assert.equal(testChain.chain.length, 3);
         assert.equal(testChain.chain[1].index, 1);
         assert.equal(testChain.chain[2].index, 2);
@@ -45,11 +45,11 @@ describe('Blockchain()', function() {
 
     it('Validate a new block', function() {
         var testChain = new Blockchain();
-        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, '0');
-        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, block1.hash);
-        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, block2.hash);
-        var block4 = new Block(4, new Date().getTime()/1000, {amount: 456}, block3.hash);
-        var block5 = new Block(5, new Date().getTime()/1000, {amount: 456}, block4.hash);
+        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, '0', 0, 0);
+        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, 0, 0, block1.hash);
+        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, 0, 0, block2.hash);
+        var block4 = new Block(4, new Date().getTime()/1000, {amount: 456}, 0, 0, block3.hash);
+        var block5 = new Block(5, new Date().getTime()/1000, {amount: 456}, 0, 0, block4.hash);
         block3.hash = CryptoJS.SHA256('some randome data');
         block5.data = JSON.stringify({amount: 500});
         block5.hash = block3.calculateHash();
@@ -63,11 +63,11 @@ describe('Blockchain()', function() {
     it('Validate the blockchain', function() {
         var testChain = new Blockchain();
         var invalidGenisisChain = new Blockchain();
-        invalidGenisisChain.chain[0] = new Block(0, new Date().getTime/1000, {amount: 0});
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
-        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}));
-        invalidGenisisChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}));
-        invalidGenisisChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}));
+        invalidGenisisChain.chain[0] = new Block(0, new Date().getTime/1000, {amount: 0}, 0, 0);
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
+        invalidGenisisChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
+        invalidGenisisChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
 
         assert.isFalse(invalidGenisisChain.isChainValid());
         assert.isTrue(testChain.isChainValid());
@@ -81,10 +81,10 @@ describe('Blockchain()', function() {
     it('Replace the blockchain', function() {
         var oldChain = new Blockchain();
         var newChain = new Blockchain();
-        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, '0');
-        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, block1.hash);
-        var block22 = new Block(2, new Date().getTime()/1000, {amount: 546}, block1.hash);
-        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, block2.hash);
+        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0, '0');
+        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, 0, 0, block1.hash);
+        var block22 = new Block(2, new Date().getTime()/1000, {amount: 546}, 0, 0, block1.hash);
+        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, 0, 0, block2.hash);
         oldChain.addBlock(block1);
         oldChain.addBlock(block2);
         newChain.addBlock(block1);
