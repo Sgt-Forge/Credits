@@ -1,4 +1,5 @@
 const { Block } = require('./block');
+const { hexToBinary } = require('./utils');
 
 class Blockchain{
     constructor(){
@@ -113,6 +114,12 @@ class Blockchain{
         }
 
         return lastBlock.difficulty
+    }
+
+    hashMatchesDifficulty(hash, difficulty){
+        const hashInBinary = hexToBinary(hash);
+        const requiredPrefix = '0'.repeat(difficulty);
+        return hashInBinary.startsWith(requiredPrefix);
     }
 }
 

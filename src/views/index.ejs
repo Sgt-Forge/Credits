@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <%- include('./partials/head') -%>
+    <h1>Hello, world!</h1>
+    <% blockchain.forEach(block => { %>
+        <h3>Block <%= block.index %></h3>
+        <p>Hash: <%= block.hash %></p>
+        <p>Previous Hash <%= block.previousHash %></p>
+        <p>Timestamp: <%= block.timestamp %></p>
+    <% }) %>
+</html>

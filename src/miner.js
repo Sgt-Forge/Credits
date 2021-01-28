@@ -15,7 +15,7 @@ class Miner {
         const index = previousBlock.index + 1;
         const previousHash = previousBlock.hash;
         const timestamp = new Date().getTime() / 1000;
-        const difficulty = this.getAdjustedDifficulty(previousBlock);
+        const difficulty = this.blockchain.getDifficulty();
         let nonce = 0;
         // Infinite while loop until we find valid block
         while(nonce >= 0) {
@@ -25,7 +25,7 @@ class Miner {
                                          difficulty +
                                          nonce +
                                          previousHash)
-            if(this.hashMatchesDifficulty(hash, difficulty)){
+            if(this.blockchain.hashMatchesDifficulty(hash, difficulty)){
                 newBlock = new Block(index, timestamp, data, difficulty, nonce, previousBlock.hash)
                 break;
             }
