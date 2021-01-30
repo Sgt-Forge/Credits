@@ -14,7 +14,7 @@ var blockchain = new Blockchain();
 var miner = new Miner(blockchain);
 
 app.get('/', (req, res) => {
-    var newBlock = miner.mineBlock();
+    var newBlock = miner.mineBlock({'amount': 1});
     blockchain.addBlock(newBlock);
     res.render('index', { blockchain: blockchain.getBlockchain() });
 })

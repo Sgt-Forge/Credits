@@ -11,9 +11,7 @@ class Blockchain{
     }
 
     createGenesisBlock(){
-        var genesis = new Block(0, 1598818841.736, {amount: 0}, 0, 0);
-        genesis.hash = genesis.calculateHash();
-
+        var genesis = new Block(0, 1598818841.736, {'amount': 0}, 0, 0, '');
         return genesis;
     }
 

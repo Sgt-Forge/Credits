@@ -12,11 +12,11 @@ class Block {
     }
 
     calculateHash(){
-        return CryptoJS.SHA256(this.index +
-                                this.timestamp +
+        return CryptoJS.SHA256(this.index.toString() +
+                                this.timestamp.toString() +
                                 JSON.stringify(this.data) +
-                                this.difficulty +
-                                this.nonce +
+                                this.difficulty.toString() +
+                                this.nonce.toString() +
                                 this.previousHash).toString();
     }
 

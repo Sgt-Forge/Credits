@@ -1,4 +1,3 @@
-
 const CryptoJS = require('crypto-js')
 const { Block } = require('./block.js');
 const { Blockchain } = require('./blockchain.js')
@@ -19,14 +18,8 @@ class Miner {
         let nonce = 0;
         // Infinite while loop until we find valid block
         while(nonce >= 0) {
-            const hash = CryptoJS.SHA256(index +
-                                         timestamp +
-                                         JSON.stringify(data) +
-                                         difficulty +
-                                         nonce +
-                                         previousHash)
-            if(this.blockchain.hashMatchesDifficulty(hash, difficulty)){
-                newBlock = new Block(index, timestamp, data, difficulty, nonce, previousBlock.hash)
+            newBlock = new Block(index, timestamp, data, difficulty, nonce, previousHash);
+            if(this.blockchain.hashMatchesDifficulty(newBlock.hash, difficulty)){
                 break;
             }
             nonce += 1;
