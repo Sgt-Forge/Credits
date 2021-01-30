@@ -117,6 +117,9 @@ class Blockchain{
     hashMatchesDifficulty(hash, difficulty){
         const hashInBinary = hexToBinary(hash);
         const requiredPrefix = '0'.repeat(difficulty);
+        console.log(hash);
+        console.log("Binary");
+        console.log(hashInBinary);
         return hashInBinary.startsWith(requiredPrefix);
     }
 }
