@@ -32,11 +32,12 @@ class Blockchain{
 
     isValidTimestamp(newBlock) {
         const lastBlock = this.getLatestBlock();
-        return lastBlock.timestamp - 60 < newBlock.timestamp && newBlock.timestamp - 60 < new Date().getTime();
+        return lastBlock.timestamp - 60 < newBlock.timestamp && newBlock.timestamp - 60 < new Date().getTime()/1000;
     }
 
 
-    isValidNewBlock(previousBlock, newBlock){
+    isValidNewBlock(newBlock){
+        const previousBlock = this.getLatestBlock();
         if(previousBlock.index + 1 !== newBlock.index){
             console.log("[ERROR]: Invalid index for new block. Previous index: ", previousBlock.index, " New index: ", newBlock.index);
             return false;

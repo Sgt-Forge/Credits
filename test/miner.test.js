@@ -25,4 +25,17 @@ describe('Miner()', function() {
         assert.equal(blockchain.getLatestBlock().index, 1)
         assert.isAbove(blockchain.getLatestBlock().timestamp, 1598818841.736)
     });
+
+    it('should increment nonce to mine new blocks at higher difficulties', function() {
+        let blockchain = new Blockchain();
+        let miner = new Miner(blockchain);
+        for(let i = 0; i < 20; i++){
+            const newData = { 'amount': i };
+            const newBlock = miner.mineBlock(newData);
+            blockchain.addBlock(newBlock);
+        }
+
+        assert.isAbove(blockchain.getLatestBlock().nonce, 0);
+        assert.isAbove(blockchain.getLatestBlock().difficulty, 0);
+    });
 });

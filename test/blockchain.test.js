@@ -45,19 +45,33 @@ describe('Blockchain()', function() {
 
     it('Validate a new block', function() {
         var testChain = new Blockchain();
-        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, '0', 0, 0);
-        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, 0, 0, block1.hash);
-        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, 0, 0, block2.hash);
-        var block4 = new Block(4, new Date().getTime()/1000, {amount: 456}, 0, 0, block3.hash);
-        var block5 = new Block(5, new Date().getTime()/1000, {amount: 456}, 0, 0, block4.hash);
-        block3.hash = CryptoJS.SHA256('some randome data');
-        block5.data = JSON.stringify({amount: 500});
-        block5.hash = block3.calculateHash();
+        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0, testChain.getLatestBlock().hash);
+        
+        assert.isTrue(testChain.isValidNewBlock(block1));
+        let oldTimeStamp = block1.timestamp;
+        let oldHash = block1.hash;
 
-        assert.isTrue(testChain.isValidNewBlock(block1, block2));
-        assert.isFalse(testChain.isValidNewBlock(block1, block3));
-        assert.isFalse(testChain.isValidNewBlock(block3, block4));
-        assert.isFalse(testChain.isValidNewBlock(block4, block5));
+        block1.index = 2;
+        block1.hash = block1.calculateHash();
+        assert.isFalse(testChain.isValidNewBlock(block1));
+
+        block1.index = 1;
+        block1.timestamp = testChain.getLatestBlock.timestamp - 60;
+        block1.hash = block1.calculateHash();
+        assert.isFalse(testChain.isValidNewBlock(block1));
+        block1.timestamp = new Date().getTime()/1000 + 60;
+        block1.hash = block1.calculateHash()
+        assert.isFalse(testChain.isValidNewBlock(block1));
+        block1.timestamp = oldTimeStamp;
+        block1.hash = oldHash;
+
+        block1.previousHash = CryptoJS.SHA256('some randome data');
+        block1.hash = block1.calculateHash()
+        assert.isFalse(testChain.isValidNewBlock(block1));
+        block1.previousHash = testChain.getLatestBlock().hash;
+        
+        block1.hash = CryptoJS.SHA256('some randome data');
+        assert.isFalse(testChain.isValidNewBlock(block1));
     });
 
     it('Validate the blockchain', function() {
