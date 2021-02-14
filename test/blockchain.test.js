@@ -48,8 +48,8 @@ describe('Blockchain()', function() {
         var block1 = new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0, testChain.getLatestBlock().hash);
 
         assert.isTrue(testChain.isValidNewBlock(block1));
-        let oldTimeStamp = block1.timestamp;
-        let oldHash = block1.hash;
+        const oldTimeStamp = block1.timestamp;
+        const oldHash = block1.hash;
 
         block1.index = 2;
         block1.hash = block1.calculateHash();
@@ -59,7 +59,8 @@ describe('Blockchain()', function() {
         block1.timestamp = testChain.getLatestBlock.timestamp - 60;
         block1.hash = block1.calculateHash();
         assert.isFalse(testChain.isValidNewBlock(block1));
-        block1.timestamp = new Date().getTime()/1000 + 60;
+        // eslint-disable-next-line no-extra-parens
+        block1.timestamp = (new Date().getTime()/1000) + 60;
         block1.hash = block1.calculateHash()
         assert.isFalse(testChain.isValidNewBlock(block1));
         block1.timestamp = oldTimeStamp;

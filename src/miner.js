@@ -1,7 +1,4 @@
-const CryptoJS = require('crypto-js')
 const { Block } = require('./block.js');
-const { Blockchain } = require('./blockchain.js')
-const app = require('./httpServer.js');
 
 class Miner {
     constructor(blockchain) {
