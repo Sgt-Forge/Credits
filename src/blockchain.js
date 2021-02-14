@@ -26,7 +26,11 @@ class Blockchain{
     addBlock(newBlock){
         newBlock.previousHash = this.getLatestBlock().hash;
         newBlock.hash = newBlock.calculateHash();
-        this.chain.push(newBlock);
+        if(this.isValidNewBlock(newBlock)){
+            this.chain.push(newBlock);
+            return true;
+        }
+        return false;
     }
 
 

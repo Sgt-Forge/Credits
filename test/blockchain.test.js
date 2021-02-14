@@ -18,8 +18,8 @@ describe('Blockchain()', function() {
 
         assert.equal(testChain.getBlockchain().length, 1);
 
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
-        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {'amount': 20}, 0, 0));
 
         assert.equal(testChain.getBlockchain().length, 3);
         assert.equal(JSON.stringify(testChain.chain), JSON.stringify(testChain.getBlockchain()));
@@ -27,7 +27,7 @@ describe('Blockchain()', function() {
 
     it('Return latest block', function() {
         var testChain = new Blockchain();
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0));
 
         var latestBlock = testChain.getLatestBlock();
         assert.equal(latestBlock.index, 1);
@@ -35,8 +35,8 @@ describe('Blockchain()', function() {
 
     it('Add block to blockchain', function() {
         var testChain = new Blockchain();
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
-        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {'amount': 20}, 0, 0));
         assert.equal(testChain.chain.length, 3);
         assert.equal(testChain.chain[1].index, 1);
         assert.equal(testChain.chain[2].index, 2);
@@ -45,8 +45,8 @@ describe('Blockchain()', function() {
 
     it('Validate a new block', function() {
         var testChain = new Blockchain();
-        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0, testChain.getLatestBlock().hash);
-        
+        var block1 = new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0, testChain.getLatestBlock().hash);
+
         assert.isTrue(testChain.isValidNewBlock(block1));
         let oldTimeStamp = block1.timestamp;
         let oldHash = block1.hash;
@@ -69,7 +69,7 @@ describe('Blockchain()', function() {
         block1.hash = block1.calculateHash()
         assert.isFalse(testChain.isValidNewBlock(block1));
         block1.previousHash = testChain.getLatestBlock().hash;
-        
+
         block1.hash = CryptoJS.SHA256('some randome data');
         assert.isFalse(testChain.isValidNewBlock(block1));
     });
@@ -77,15 +77,15 @@ describe('Blockchain()', function() {
     it('Validate the blockchain', function() {
         var testChain = new Blockchain();
         var invalidGenisisChain = new Blockchain();
-        invalidGenisisChain.chain[0] = new Block(0, new Date().getTime/1000, {amount: 0}, 0, 0);
-        testChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
-        testChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
-        invalidGenisisChain.addBlock(new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0));
-        invalidGenisisChain.addBlock(new Block(2, new Date().getTime()/1000, {amount: 20}, 0, 0));
+        invalidGenisisChain.chain[0] = new Block(0, new Date().getTime/1000, {'amount': 0}, 0, 0);
+        testChain.addBlock(new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0));
+        testChain.addBlock(new Block(2, new Date().getTime()/1000, {'amount': 20}, 0, 0));
+        invalidGenisisChain.addBlock(new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0));
+        invalidGenisisChain.addBlock(new Block(2, new Date().getTime()/1000, {'amount': 20}, 0, 0));
 
         assert.isFalse(invalidGenisisChain.isChainValid());
         assert.isTrue(testChain.isChainValid());
-        testChain.chain[1].data = {amount: 100};
+        testChain.chain[1].data = {'amount': 100};
         assert.isFalse(testChain.isChainValid());
         testChain.chain[1].hash = testChain.chain[1].calculateHash();
         assert.isFalse(testChain.isChainValid());
@@ -95,10 +95,10 @@ describe('Blockchain()', function() {
     it('Replace the blockchain', function() {
         var oldChain = new Blockchain();
         var newChain = new Blockchain();
-        var block1 = new Block(1, new Date().getTime()/1000, {amount: 10}, 0, 0, '0');
-        var block2 = new Block(2, new Date().getTime()/1000, {amount: 234}, 0, 0, block1.hash);
-        var block22 = new Block(2, new Date().getTime()/1000, {amount: 546}, 0, 0, block1.hash);
-        var block3 = new Block(3, new Date().getTime()/1000, {amount: 345}, 0, 0, block2.hash);
+        var block1 = new Block(1, new Date().getTime()/1000, {'amount': 10}, 0, 0, '0');
+        var block2 = new Block(2, new Date().getTime()/1000, {'amount': 234}, 0, 0, block1.hash);
+        var block22 = new Block(2, new Date().getTime()/1000, {'amount': 546}, 0, 0, block1.hash);
+        var block3 = new Block(3, new Date().getTime()/1000, {'amount': 345}, 0, 0, block2.hash);
         oldChain.addBlock(block1);
         oldChain.addBlock(block2);
         newChain.addBlock(block1);
@@ -112,5 +112,74 @@ describe('Blockchain()', function() {
         assert.equal(oldChain.chain.length, 4);
         assert.equal(JSON.stringify(newChain), JSON.stringify(oldChain));
         assert.equal(oldChain.chain[2].data["amount"], 546);
+    });
+
+    it('It increases difficulty', function() {
+        var testChain = new Blockchain();
+        const oldDifficulty = testChain.getDifficulty();
+        for(let i = 0; i < 10; i++){
+            const previousBlock = testChain.getLatestBlock();
+            const index = previousBlock.index + 1;
+            const timestamp = new Date().getTime()/1000;
+            const data = {'amount': i};
+            const difficulty = testChain.getDifficulty();
+            const nonce = 0;
+            const previousHash = previousBlock.hash;
+            const newBlock = new Block(index, timestamp, data, difficulty, nonce, previousHash);
+            testChain.addBlock(newBlock);
+        }
+        const lastAdjustmentBlock = testChain.getBlockchain()[testChain.getBlockchain().length - testChain.DIFFICULTY_ADJUSTMENT_INTERVAL];
+        // eslint-disable-next-line no-extra-parens
+        testChain.getLatestBlock().timestamp = lastAdjustmentBlock.timestamp + 5.0;
+        const newDifficulty = testChain.getDifficulty();
+        assert.isAbove(newDifficulty, oldDifficulty);
+    });
+
+    it('It decreases difficulty', function(){
+        var testChain = new Blockchain();
+        let oldDifficulty = testChain.getDifficulty();
+        for(let i = 0; i < 10; i++){
+            const previousBlock = testChain.getLatestBlock();
+            const index = previousBlock.index + 1;
+            const timestamp = new Date().getTime()/1000;
+            const data = {'amount': i};
+            const difficulty = testChain.getDifficulty();
+            const nonce = 0;
+            const previousHash = previousBlock.hash;
+            const newBlock = new Block(index, timestamp, data, difficulty, nonce, previousHash);
+            testChain.addBlock(newBlock);
+        }
+        const lastAdjustmentBlock = testChain.getBlockchain()[testChain.getBlockchain().length - testChain.DIFFICULTY_ADJUSTMENT_INTERVAL];
+        // eslint-disable-next-line no-extra-parens
+        testChain.getLatestBlock().timestamp = lastAdjustmentBlock.timestamp + 5.0;
+        let newDifficulty = testChain.getDifficulty();
+        assert.isAbove(newDifficulty, oldDifficulty);
+
+        oldDifficulty = newDifficulty;
+        // eslint-disable-next-line no-extra-parens
+        testChain.getLatestBlock().timestamp = (testChain.BLOCK_GENERATION_INTERVAL * testChain.DIFFICULTY_ADJUSTMENT_INTERVAL * 4.0) + lastAdjustmentBlock.timestamp;
+        newDifficulty = testChain.getDifficulty();
+        assert.isBelow(newDifficulty, oldDifficulty);
+    });
+
+    it('should maintain difficulty if hashrate is as expected', function(){
+        var testChain = new Blockchain();
+        const oldDifficulty = testChain.getDifficulty();
+        for(let i = 0; i < 10; i++){
+            const previousBlock = testChain.getLatestBlock();
+            const index = previousBlock.index + 1;
+            const timestamp = new Date().getTime()/1000;
+            const data = {'amount': i};
+            const difficulty = testChain.getDifficulty();
+            const nonce = 0;
+            const previousHash = previousBlock.hash;
+            const newBlock = new Block(index, timestamp, data, difficulty, nonce, previousHash);
+            testChain.addBlock(newBlock);
+        }
+        const lastAdjustmentBlock = testChain.getBlockchain()[testChain.getBlockchain().length - testChain.DIFFICULTY_ADJUSTMENT_INTERVAL];
+        // eslint-disable-next-line no-extra-parens
+        testChain.getLatestBlock().timestamp = lastAdjustmentBlock.timestamp + (testChain.DIFFICULTY_ADJUSTMENT_INTERVAL * testChain.BLOCK_GENERATION_INTERVAL);
+        const newDifficulty = testChain.getDifficulty();
+        assert.equal(newDifficulty, oldDifficulty);
     });
 });

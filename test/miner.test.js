@@ -35,7 +35,6 @@ describe('Miner()', function() {
             blockchain.addBlock(newBlock);
         }
 
-        assert.isAbove(blockchain.getLatestBlock().nonce, 0);
         assert.isAbove(blockchain.getLatestBlock().difficulty, 0);
     });
 });
